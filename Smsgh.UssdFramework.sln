@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smsgh.UssdFramework.Demo", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smsgh.UssdFramework", "Smsgh.UssdFramework\Smsgh.UssdFramework.csproj", "{D71C098E-E9D7-4E74-8E4B-9F0DFF406604}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smsgh.UssdFramework.Demo.NancyFX", "Smsgh.UssdFramework.Demo.NancyFX\Smsgh.UssdFramework.Demo.NancyFX.csproj", "{F8A5A9AD-F680-46F4-806F-653E7E51A030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D71C098E-E9D7-4E74-8E4B-9F0DFF406604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D71C098E-E9D7-4E74-8E4B-9F0DFF406604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D71C098E-E9D7-4E74-8E4B-9F0DFF406604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8A5A9AD-F680-46F4-806F-653E7E51A030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8A5A9AD-F680-46F4-806F-653E7E51A030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8A5A9AD-F680-46F4-806F-653E7E51A030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8A5A9AD-F680-46F4-806F-653E7E51A030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
