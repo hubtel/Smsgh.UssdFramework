@@ -97,6 +97,10 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Smsgh.UssdFramework.Logging\Smsgh.UssdFramework.Logging.csproj">
+      <Project>{e67095bd-a5f4-4883-82aa-4acdb7becbc6}</Project>
+      <Name>Smsgh.UssdFramework.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Smsgh.UssdFramework\Smsgh.UssdFramework.csproj">
       <Project>{d71c098e-e9d7-4e74-8e4b-9f0dff406604}</Project>
       <Name>Smsgh.UssdFramework</Name>

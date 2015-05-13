@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D71C098E-E9D7-4E74-8E4B-9F0DFF406604}</ProjectGuid>
+    <ProjectGuid>{E67095BD-A5F4-4883-82AA-4ACDB7BECBC6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Smsgh.UssdFramework</RootNamespace>
-    <AssemblyName>Smsgh.UssdFramework</AssemblyName>
+    <RootNamespace>Smsgh.UssdFramework.Logging</RootNamespace>
+    <AssemblyName>Smsgh.UssdFramework.Logging</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StackExchange.Redis">
-      <HintPath>..\packages\StackExchange.Redis.1.0.394\lib\net45\StackExchange.Redis.dll</HintPath>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\MongoDB.Bson.2.0.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\MongoDB.Driver.2.0.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.0.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,21 +48,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoggingStores\ILoggingStore.cs" />
-    <Compile Include="LoggingStores\UssdSessionLog.cs" />
+    <Compile Include="MongoDb\MongoDbSessionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stores\IStore.cs" />
-    <Compile Include="Stores\RedisStore.cs" />
-    <Compile Include="Ussd.cs" />
-    <Compile Include="UssdContext.cs" />
-    <Compile Include="UssdController.cs" />
-    <Compile Include="UssdDataBag.cs" />
-    <Compile Include="UssdRequest.cs" />
-    <Compile Include="UssdResponse.cs" />
+    <Compile Include="MongoDb\MongoDbLoggingStore.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smsgh.UssdFramework\Smsgh.UssdFramework.csproj">
+      <Project>{d71c098e-e9d7-4e74-8e4b-9f0dff406604}</Project>
+      <Name>Smsgh.UssdFramework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

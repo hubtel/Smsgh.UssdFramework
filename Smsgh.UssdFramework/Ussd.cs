@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
+using Smsgh.UssdFramework.LoggingStores;
 using Smsgh.UssdFramework.Stores;
 
 namespace Smsgh.UssdFramework
@@ -47,21 +48,28 @@ namespace Smsgh.UssdFramework
         /// <summary>
         /// Process USSD
         /// </summary>
-        /// <param name="store"></param>
+        /// <param name="store">Session store</param>
         /// <param name="request"></param>
         /// <param name="initiationController">Initiation controller</param>
         /// <param name="initiationAction">Initiation action</param>
         /// <param name="data"></param>
+        /// <param name="loggingStore">Logging store</param>
+        /// <param name="arbitraryLogData">Arbitrary data to add to log</param>
         /// <returns></returns>
         public static async Task<UssdResponse> Process(IStore store, UssdRequest request,
             string initiationController, string initiationAction,
-            Dictionary<string, string> data = null)
+            Dictionary<string, string> data = null, ILoggingStore loggingStore = null, string arbitraryLogData = null)
         {
+            var startTime = DateTime.UtcNow;
             if (data == null)
             {
                 data = new Dictionary<string, string>();
             }
             var context = new UssdContext(store, request, data);
+            UssdResponse response;
+            DateTime endTime;
+            if (loggingStore != null) 
+                await PreLog(loggingStore, request, startTime, arbitraryLogData);
             try
             {
                 switch (request.RequestType)
@@ -69,19 +77,53 @@ namespace Smsgh.UssdFramework
                     case UssdRequestTypes.Initiation:
                         var route = string.Format("{0}Controller.{1}", 
                             initiationController, initiationAction);
-                        return await OnInitiation(context, route);
+                        response = await OnInitiation(context, route);
+                        break;
                     default:
-                        return await OnResponse(context);
+                        response = await OnResponse(context);
+                        break;
                 }
             }
             catch (Exception e)
             {
-                return UssdResponse.Render(e.Message);
+                response = UssdResponse.Render(e.Message);
             }
             finally
             {
+                endTime = DateTime.UtcNow;
                 context.Dispose();
             }
+            if (loggingStore != null)
+                await PostLog(loggingStore, request, response, startTime, endTime);
+            return response;
+        }
+
+        private static async Task PreLog(ILoggingStore store, UssdRequest request, DateTime startTime, 
+            string arbitraryData)
+        {
+            if (request.RequestType != UssdRequestTypes.Initiation) return;
+            var log = new UssdSessionLog
+            {
+                Mobile = request.Mobile,
+                SessionId = request.SessionId,
+                StartTime = startTime,
+                ArbitraryData = arbitraryData,
+            };
+            await store.Create(log);
+        } 
+
+        private static async Task PostLog(ILoggingStore store, UssdRequest request, UssdResponse response,
+            DateTime startTime, DateTime endTime)
+        {
+            var entry = new UssdSessionLogEntry
+            {
+                StartTime = startTime,
+                EndTime = endTime,
+                DurationInMilliseconds = endTime.Subtract(startTime).TotalMilliseconds,
+                UssdRequest = request,
+                UssdResponse = response,
+            };
+            await store.AddEntry(request.SessionId, entry);
         }
     }
 }
