@@ -9,7 +9,7 @@ The previous [UssdFramework](http://github.com/smsgh/ussd-framework) was a nice 
 * Explicit routing.
 * Integrated session store.
 * Step based flow.
-* Unnecessary abstractions that limits flexiblity.
+* Unnecessary abstractions that limit flexiblity.
 
 __Smsgh.UssdFramework__ addresses these and a lot more by focusing on simplicity.
 
@@ -23,15 +23,23 @@ __Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on 
 * ASP.NET MVC / Web Api -ish controllers. 
 * Dynamic routing.
 * `DataBag` helper in controllers for caching data across requests.
+* Session logging (optional).
 
-## Usage
+## Quick Start
+
+### Dependencies
+
+Smsgh.UssdFramework requires a session store. This defaults to [Redis](http://redis.io).
+
+On Windows, Redis can be installed using [github.com/MSOpenTech/redis](https://github.com/MSOpenTech/redis).
+
 
 ### Installation
 
 The easiest way to install Smsgh.UssdFramework is via [NuGet](http://www.nuget.org/).
 
 ```
-Install-Package Smsgh.UssdFramework
+PM> Install-Package Smsgh.UssdFramework
 ```
 
 ### Setup
@@ -121,6 +129,51 @@ And that's it!
 See [Smsgh.UssdFramework.Demo](https://github.com/smsgh/Smsgh.UssdFramework/tree/master/Smsgh.UssdFramework.Demo) folder in source for full sample source code.
 
 You can simulate USSD sessions using [USSD Mocker](https://github.com/smsgh/ussd-mocker).
+
+
+## Logging
+
+It is often convenient to log USSD sessions. Smsgh.UssdFramework supports logging to [MongoDB](https://www.mongodb.org/).
+
+### Dependencies
+
+Visit [mongodb.org/downloads](https://www.mongodb.org/downloads) to install MongoDB.
+
+### Installation
+
+Install `Smsgh.UssdFramework.Logging` from [NuGet](http://www.nuget.org/).
+
+```
+PM> Install-Package Smsgh.UssdFramework.Logging
+```
+
+### Setup 
+
+To enable logging pass an instance of `MongoDbLoggingStore` when calling `Ussd.Process`.
+
+```
+using System.Threading.Tasks;
+using System.Web.Http;
+using Smsgh.UssdFramework.Logging;
+using Smsgh.UssdFramework.Stores;
+
+namespace Smsgh.UssdFramework.Demo.Controllers
+{
+    public class DefaultController : ApiController
+    {
+        [HttpPost]
+        public async Task<IHttpActionResult> Index(UssdRequest request)
+        {
+            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Menu", null, 
+                new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
+        } 
+    }
+}
+```
+
+That's it! 
+
+You will now have detailed session logs in your MongoDB database. You can use a tool like [UMongo](http://http://edgytech.com/umongo/) to view logs.
 
 
 # License
