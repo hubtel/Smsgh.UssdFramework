@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Smsgh.UssdFramework.Demo.Controllers
+namespace Smsgh.UssdFramework.Demo.UssdControllers
 {
     public class MainController : UssdController
     {
