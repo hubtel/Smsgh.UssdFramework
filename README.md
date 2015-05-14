@@ -151,7 +151,7 @@ PM> Install-Package Smsgh.UssdFramework.Logging
 
 To enable logging pass an instance of `MongoDbLoggingStore` when calling `Ussd.Process`.
 
-```
+```c#
 using System.Threading.Tasks;
 using System.Web.Http;
 using Smsgh.UssdFramework.Logging;
