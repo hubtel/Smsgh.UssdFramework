@@ -24,7 +24,7 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
             var filter = Builders<MongoDbSessionLog>.Filter.Gt(x => x.StartTime, 
                 DateTime.UtcNow.Subtract(since));
             var results = await Collection.Find(filter).ToListAsync();
-            return results.AsQueryable();
+            return results.AsQueryable().OrderByDescending(x => x.StartTime);
         }
 
         public async Task<UssdSessionLog> Find(string sessionId)
