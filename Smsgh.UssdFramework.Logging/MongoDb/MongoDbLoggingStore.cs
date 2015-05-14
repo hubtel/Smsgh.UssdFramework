@@ -51,7 +51,6 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
 
         public async Task Update(UssdSessionLog log)
         {
-            if (log.EndTime == null) return;
             var filter = Builders<MongoDbSessionLog>.Filter.Where(x => x.SessionId == log.SessionId);
             var update = Builders<MongoDbSessionLog>.Update.Set(x => x.EndTime, log.EndTime)
                 .Set(x => x.DurationInMilliseconds, log.DurationInMilliseconds);
@@ -60,8 +59,6 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
 
         public async Task AddEntry(string sessionId, UssdSessionLogEntry entry)
         {
-            var log = await Find(sessionId);
-            if (log == null) return;
             var filter = Builders<MongoDbSessionLog>.Filter.Where(x => x.SessionId == sessionId);
             var update = Builders<MongoDbSessionLog>.Update.AddToSet(x => x.Entries, entry);
             await Collection.UpdateOneAsync(filter, update);
