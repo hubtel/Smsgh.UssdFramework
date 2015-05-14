@@ -12,7 +12,7 @@ namespace Smsgh.UssdFramework.LoggingStores
         public double? DurationInMilliseconds { get; set; }
         public List<UssdSessionLogEntry> Entries { get; set; }
         public string ArbitraryData { get; set; }
-        public string ErrorTrace { get; set; }
+        public string ErrorStackTrace { get; set; }
 
         public UssdSessionLog()
         {

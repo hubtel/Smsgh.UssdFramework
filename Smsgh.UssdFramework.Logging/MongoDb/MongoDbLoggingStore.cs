@@ -54,7 +54,7 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
             var filter = Builders<MongoDbSessionLog>.Filter.Where(x => x.SessionId == log.SessionId);
             var update = Builders<MongoDbSessionLog>.Update.Set(x => x.EndTime, log.EndTime)
                 .Set(x => x.DurationInMilliseconds, log.DurationInMilliseconds)
-                .Set(x => x.ErrorTrace, log.ErrorTrace);
+                .Set(x => x.ErrorStackTrace, log.ErrorStackTrace);
             await Collection.FindOneAndUpdateAsync(filter, update);
         }
 

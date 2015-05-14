@@ -121,7 +121,7 @@ namespace Smsgh.UssdFramework
             if (log == null) return;
             log.EndTime = endTime;
             log.DurationInMilliseconds = endTime.Subtract(log.StartTime).TotalMilliseconds;
-            log.ErrorTrace = error;
+            log.ErrorStackTrace = error;
             var entry = new UssdSessionLogEntry
             {
                 StartTime = startTime,
