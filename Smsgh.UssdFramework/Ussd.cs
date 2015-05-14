@@ -119,6 +119,9 @@ namespace Smsgh.UssdFramework
         {
             var log = await store.Find(request.SessionId);
             if (log == null) return;
+            log.EndTime = endTime;
+            log.DurationInMilliseconds = endTime.Subtract(log.StartTime).TotalMilliseconds;
+            log.ErrorTrace = error;
             var entry = new UssdSessionLogEntry
             {
                 StartTime = startTime,
@@ -128,8 +131,6 @@ namespace Smsgh.UssdFramework
                 UssdResponse = response,
                 ErrorTrace = error,
             };
-            log.EndTime = endTime;
-            log.DurationInMilliseconds = endTime.Subtract(log.StartTime).TotalMilliseconds;
             await store.Update(log);
             await store.AddEntry(request.SessionId, entry);
         }
