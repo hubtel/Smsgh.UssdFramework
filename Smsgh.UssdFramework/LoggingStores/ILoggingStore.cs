@@ -9,6 +9,7 @@ namespace Smsgh.UssdFramework.LoggingStores
         Task<IQueryable<UssdSessionLog>> FindAll(TimeSpan since);
         Task<UssdSessionLog> Find(string sessionId);
         Task Create(UssdSessionLog log);
+        Task Update(UssdSessionLog log);
         Task AddEntry(string sessionId, UssdSessionLogEntry entry);
     }
 }

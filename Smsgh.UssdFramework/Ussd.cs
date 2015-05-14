@@ -54,7 +54,7 @@ namespace Smsgh.UssdFramework
         /// <param name="initiationAction">Initiation action</param>
         /// <param name="data"></param>
         /// <param name="loggingStore">Logging store</param>
-        /// <param name="arbitraryLogData">Arbitrary data to add to log</param>
+        /// <param name="arbitraryLogData">Arbitrary data to add to session log</param>
         /// <returns></returns>
         public static async Task<UssdResponse> Process(IStore store, UssdRequest request,
             string initiationController, string initiationAction,
@@ -90,8 +90,8 @@ namespace Smsgh.UssdFramework
             }
             finally
             {
-                endTime = DateTime.UtcNow;
                 context.Dispose();
+                endTime = DateTime.UtcNow;
             }
             if (loggingStore != null)
                 await PostLog(loggingStore, request, response, startTime, endTime);
@@ -115,6 +115,8 @@ namespace Smsgh.UssdFramework
         private static async Task PostLog(ILoggingStore store, UssdRequest request, UssdResponse response,
             DateTime startTime, DateTime endTime)
         {
+            var log = await store.Find(request.SessionId);
+            if (log == null) return;
             var entry = new UssdSessionLogEntry
             {
                 StartTime = startTime,
@@ -123,6 +125,9 @@ namespace Smsgh.UssdFramework
                 UssdRequest = request,
                 UssdResponse = response,
             };
+            log.EndTime = endTime;
+            log.DurationInMilliseconds = endTime.Subtract(log.StartTime).TotalMilliseconds;
+            await store.Update(log);
             await store.AddEntry(request.SessionId, entry);
         }
     }

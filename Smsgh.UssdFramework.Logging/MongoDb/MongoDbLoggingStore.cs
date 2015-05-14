@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Smsgh.UssdFramework.LoggingStores;
 
@@ -48,14 +49,21 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
             await Collection.InsertOneAsync(mongoLog);
         }
 
+        public async Task Update(UssdSessionLog log)
+        {
+            if (log.EndTime == null) return;
+            var filter = Builders<MongoDbSessionLog>.Filter.Where(x => x.SessionId == log.SessionId);
+            var update = Builders<MongoDbSessionLog>.Update.Set(x => x.EndTime, log.EndTime)
+                .Set(x => x.DurationInMilliseconds, log.DurationInMilliseconds);
+            await Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
         public async Task AddEntry(string sessionId, UssdSessionLogEntry entry)
         {
             var log = await Find(sessionId);
             if (log == null) return;
             var filter = Builders<MongoDbSessionLog>.Filter.Where(x => x.SessionId == sessionId);
-            var update = Builders<MongoDbSessionLog>.Update.Set(x => x.EndTime, entry.EndTime)
-                .Set(x => x.DurationInMilliseconds, entry.EndTime.Subtract(log.StartTime).TotalMilliseconds)
-                .AddToSet(x => x.Entries, entry);
+            var update = Builders<MongoDbSessionLog>.Update.AddToSet(x => x.Entries, entry);
             await Collection.UpdateOneAsync(filter, update);
         }
 
@@ -63,5 +71,10 @@ namespace Smsgh.UssdFramework.Logging.MongoDb
         public void Dispose()
         {
         }
+    }
+
+    public class MongoDbSessionLog : UssdSessionLog
+    {
+        public ObjectId Id { get; set; }
     }
 }

@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoDb\MongoDbSessionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MongoDb\MongoDbLoggingStore.cs" />
   </ItemGroup>
