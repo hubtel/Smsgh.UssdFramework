@@ -27,6 +27,5 @@ namespace Smsgh.UssdFramework.LoggingStores
         public double DurationInMilliseconds { get; set; }
         public UssdRequest UssdRequest { get; set; }
         public UssdResponse UssdResponse { get; set; }
-        public string ErrorTrace { get; set; }
     }
 }

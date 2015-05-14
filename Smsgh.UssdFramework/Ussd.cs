@@ -129,7 +129,6 @@ namespace Smsgh.UssdFramework
                 DurationInMilliseconds = endTime.Subtract(startTime).TotalMilliseconds,
                 UssdRequest = request,
                 UssdResponse = response,
-                ErrorTrace = error,
             };
             await store.Update(log);
             await store.AddEntry(request.SessionId, entry);
