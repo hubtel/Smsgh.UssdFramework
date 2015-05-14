@@ -5,7 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Smsgh.UssdFramework.LoggingStores;
 
-namespace Smsgh.UssdFramework.Logging.MongoDb
+namespace Smsgh.UssdFramework.Logging
 {
     public class MongoDbLoggingStore : ILoggingStore
     {

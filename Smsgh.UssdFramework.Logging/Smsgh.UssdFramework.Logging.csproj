@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MongoDb\MongoDbLoggingStore.cs" />
+    <Compile Include="MongoDbLoggingStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Smsgh.UssdFramework\Smsgh.UssdFramework.csproj">
