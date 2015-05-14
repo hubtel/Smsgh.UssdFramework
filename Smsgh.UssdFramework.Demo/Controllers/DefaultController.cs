@@ -15,7 +15,7 @@ namespace Smsgh.UssdFramework.Demo.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Index(UssdRequest request)
         {
-            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Menu", null, 
+            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Start", null, 
                 new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
         } 
     }
