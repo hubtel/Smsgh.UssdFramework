@@ -23,6 +23,7 @@ __Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on 
 * ASP.NET MVC / Web Api -ish controllers. 
 * Dynamic routing.
 * `DataBag` helper in controllers for caching data across requests.
+* Create forms to collect user input.
 * Session logging (optional).
 
 ## Quick Start
@@ -44,7 +45,7 @@ PM> Install-Package Smsgh.UssdFramework
 
 ### Setup
 
-To process USSD requests, just call `Ussd.Process`.
+To process USSD requests, make a static call to `Ussd.Process`.
 
 Here is a sample setup in an [ASP.NET Web Api](http://www.asp.net/web-api) action.
 
@@ -60,7 +61,7 @@ namespace Smsgh.UssdFramework.Demo.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Index(UssdRequest request)
         {
-            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Menu"));
+            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Start"));
         } 
     }
 }
@@ -76,33 +77,36 @@ Next we create our `MainController` which inherits `UssdController`.
 using System;
 using System.Threading.Tasks;
 
-namespace Smsgh.UssdFramework.Demo.Controllers
+namespace Smsgh.UssdFramework.Demo.UssdControllers
 {
     public class MainController : UssdController
     {
-        public async Task<UssdResponse> Menu()
+        public async Task<UssdResponse> Start()
         {
-            return Render("Welcome" + Environment.NewLine
+            var display = "Welcome" + Environment.NewLine
                           + "1. Greet me" + Environment.NewLine
-                          + "2. Exit",
-                "MenuProcessor");
+                          + "2. Exit";
+            var menu = UssdMenu.New(display)
+                .Redirect("1", "GreetingForm")
+                .Redirect("2", "Exit");
+            return await RenderMenu(menu);
         }
 
-        public async Task<UssdResponse> MenuProcessor()
-        {
-            switch (Request.TrimmedMessage)
-            {
-                case "1":
-                    return Render("Enter Name", "Name");
-                case "2":
-                    return Render("Bye bye");
-                default:
-                    return Render("Invalid menu choice");
-            }
-        }
 
-        public async Task<UssdResponse> Name()
+        public async Task<UssdResponse> GreetingForm()
         {
+            var form = UssdForm.New("Greet Me!", "Greeting")
+                .AddInput(UssdInput.New("Name"))
+                .AddInput(
+                    UssdInput.New("Sex")
+                        .Option("M", "Male")
+                        .Option("F", "Female"));
+            return await RenderForm(form);
+        } 
+
+        public async Task<UssdResponse> Greeting()
+        {
+            var formData = await GetFormData();
             var hour = DateTime.UtcNow.Hour;
             var greeting = string.Empty;
             if (hour < 12)
@@ -117,8 +121,14 @@ namespace Smsgh.UssdFramework.Demo.Controllers
             {
                 greeting = "Good night";
             }
-            return Render(string.Format("{0}, {1}",
-                greeting, Request.TrimmedMessage));
+            var name = formData["Name"];
+            var prefix = formData["Sex"] == "M" ? "Master" : "Madam";
+            return Render(string.Format("{0}, {1} {2}!", greeting, prefix, name));
+        }
+
+        public async Task<UssdResponse> Exit()
+        {
+            return await Task.FromResult(Render("Bye bye!"));
         } 
     }
 }
@@ -164,7 +174,7 @@ namespace Smsgh.UssdFramework.Demo.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Index(UssdRequest request)
         {
-            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Menu", null, 
+            return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Start", null, 
                 new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
         } 
     }
