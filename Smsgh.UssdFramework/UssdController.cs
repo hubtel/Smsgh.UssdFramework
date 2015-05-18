@@ -75,17 +75,26 @@ namespace Smsgh.UssdFramework
             return Render(ussdMenu.Display, "MenuProcessor");
         }
 
+        /// <summary>
+        /// Render a form (series of inputs).
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         public async Task<UssdResponse> RenderForm(UssdForm form)
         {
             var json = JsonConvert.SerializeObject(form);
             await DataBag.Set(FormProcessorDataKey, json);
-            return Redirect("FormInputDisplay");
+            return Redirect("FormInputDisplay"); 
         } 
         #endregion
 
 
         #region Helpers
 
+        /// <summary>
+        /// Get Form's response data.
+        /// </summary>
+        /// <returns></returns>
         public async Task<Dictionary<string, string>> GetFormData()
         {
             var json = await DataBag.Get(FormDataKey);
@@ -122,7 +131,7 @@ namespace Smsgh.UssdFramework
             var input = form.Inputs[form.ProcessingPosition];
             var displayName = string.IsNullOrWhiteSpace(input.DisplayName)
                 ? input.Name : input.DisplayName;
-            var message = "";
+            var message = string.Empty;
             if (!string.IsNullOrWhiteSpace(form.Title))
             {
                 message += form.Title + Environment.NewLine;
@@ -171,6 +180,7 @@ namespace Smsgh.UssdFramework
             form.Data.Add(key, value);
             if (form.ProcessingPosition == (form.Inputs.Count - 1))
             {
+                await DataBag.Delete(FormProcessorDataKey);
                 var jsonData = JsonConvert.SerializeObject(form.Data);
                 await DataBag.Set(FormDataKey, jsonData);
                 return Redirect(form.Action, form.Controller);
@@ -188,7 +198,7 @@ namespace Smsgh.UssdFramework
             return form;
         } 
 
-        #endregion Internal Actions
+        #endregion
 
 
         public virtual void Dispose()

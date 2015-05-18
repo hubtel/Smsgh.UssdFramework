@@ -44,6 +44,11 @@ namespace Smsgh.UssdFramework
             return new UssdForm(title, action, controller);
         }
 
+        /// <summary>
+        /// Add input field to form.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public UssdForm AddInput(UssdInput input)
         {
             Inputs.Add(input);

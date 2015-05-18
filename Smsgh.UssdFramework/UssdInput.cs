@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Smsgh.UssdFramework
 {
+    /// <summary>
+    /// USSD input.
+    /// </summary>
     public class UssdInput
     {
         public string Name { get; set; }
@@ -18,6 +21,12 @@ namespace Smsgh.UssdFramework
             Options = new List<UssdInputOption>();
         }
 
+        /// <summary>
+        /// New USSD input.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="displayName"></param>
+        /// <returns></returns>
         public static UssdInput New(string name, string displayName = null)
         {
             var input = new UssdInput
@@ -28,6 +37,13 @@ namespace Smsgh.UssdFramework
             return input;
         }
 
+        /// <summary>
+        /// Add possible input option to USSD input. 
+        /// Makes input a selection based input.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="displayValue"></param>
+        /// <returns></returns>
         public UssdInput Option(string value, string displayValue = null)
         {
             Options.Add(UssdInputOption.New(value, displayValue));
