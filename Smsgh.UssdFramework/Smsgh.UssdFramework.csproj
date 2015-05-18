@@ -55,6 +55,8 @@
     <Compile Include="UssdContext.cs" />
     <Compile Include="UssdController.cs" />
     <Compile Include="UssdDataBag.cs" />
+    <Compile Include="UssdForm.cs" />
+    <Compile Include="UssdInput.cs" />
     <Compile Include="UssdMenu.cs" />
     <Compile Include="UssdRequest.cs" />
     <Compile Include="UssdResponse.cs" />

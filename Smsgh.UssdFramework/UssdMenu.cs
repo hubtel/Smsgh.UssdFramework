@@ -25,7 +25,7 @@ namespace Smsgh.UssdFramework
         /// </summary>
         /// <param name="display"></param>
         /// <returns></returns>
-        public static UssdMenu Create(string display)
+        public static UssdMenu New(string display)
         {
             return new UssdMenu(display);
         }

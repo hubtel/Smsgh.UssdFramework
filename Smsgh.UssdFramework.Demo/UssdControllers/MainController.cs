@@ -10,14 +10,27 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
             var display = "Welcome" + Environment.NewLine
                           + "1. Greet me" + Environment.NewLine
                           + "2. Exit";
-            var menu = UssdMenu.Create(display)
-                .Redirect("1", "Greeting")
+            var menu = UssdMenu.New(display)
+                .Redirect("1", "GreetingForm")
                 .Redirect("2", "Exit");
             return await RenderMenu(menu);
         }
 
+
+        public async Task<UssdResponse> GreetingForm()
+        {
+            var form = UssdForm.New("Greet Me!", "Greeting")
+                .AddInput(UssdInput.New("Name"))
+                .AddInput(
+                    UssdInput.New("Sex")
+                        .Option("M", "Male")
+                        .Option("F", "Female"));
+            return await RenderForm(form);
+        } 
+
         public async Task<UssdResponse> Greeting()
         {
+            var formData = await GetFormData();
             var hour = DateTime.UtcNow.Hour;
             var greeting = string.Empty;
             if (hour < 12)
@@ -32,7 +45,9 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
             {
                 greeting = "Good night";
             }
-            return Render(greeting);
+            var name = formData["Name"];
+            var prefix = formData["Sex"] == "M" ? "Master" : "Madam";
+            return Render(string.Format("{0}, {1} {2}!", greeting, prefix, name));
         }
 
         public async Task<UssdResponse> Exit()
