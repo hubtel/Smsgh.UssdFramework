@@ -70,9 +70,9 @@ namespace Smsgh.UssdFramework
         /// <returns></returns>
         public async Task<UssdResponse> RenderMenu(UssdMenu ussdMenu)
         {
-            var json = JsonConvert.SerializeObject(ussdMenu.Choices);
+            var json = JsonConvert.SerializeObject(ussdMenu);
             await DataBag.Set(MenuProcessorDataKey, json);
-            return Render(ussdMenu.Display, "MenuProcessor");
+            return Render(ussdMenu.Render(), "MenuProcessor");
         }
 
         /// <summary>
@@ -108,21 +108,20 @@ namespace Smsgh.UssdFramework
         public async Task<UssdResponse> MenuProcessor()
         {
             var json = await DataBag.Get(MenuProcessorDataKey);
-            var choices = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            if (!choices.ContainsKey(Request.TrimmedMessage))
+            var menu = JsonConvert.DeserializeObject<UssdMenu>(json);
+            UssdMenuItem item;
+            try
             {
-                return Render("Menu choice does not exist.");
+                var choice = Convert.ToInt16(Request.TrimmedMessage);
+                item = menu.Items[choice-1];
             }
-            var route = choices[Request.TrimmedMessage];
-            var routeList = route.Split(',');
-            var action = routeList[0];
-            string controller = null;
-            if (routeList.Count() == 2)
+            catch (Exception exception)
             {
-                controller = routeList[1];
+                return Render(string.Format("Menu choice {0} does not exist.", 
+                    Request.TrimmedMessage));
             }
             await DataBag.Delete(MenuProcessorDataKey);
-            return Redirect(action, controller);
+            return Redirect(item.Action, item.Controller);
         }
 
         public async Task<UssdResponse> FormInputDisplay()

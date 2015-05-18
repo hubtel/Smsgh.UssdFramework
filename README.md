@@ -83,12 +83,9 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
     {
         public async Task<UssdResponse> Start()
         {
-            var display = "Welcome" + Environment.NewLine
-                          + "1. Greet me" + Environment.NewLine
-                          + "2. Exit";
-            var menu = UssdMenu.New(display)
-                .Redirect("1", "GreetingForm")
-                .Redirect("2", "Exit");
+            var menu = UssdMenu.New("Welcome", Environment.NewLine + "by SMSGH")
+                .AddItem("Greet me", "GreetingForm")
+                .AddItem("Exit", "Exit");
             return await RenderMenu(menu);
         }
 
