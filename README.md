@@ -94,10 +94,9 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
         {
             var form = UssdForm.New("Greet Me!", "Greeting")
                 .AddInput(UssdInput.New("Name"))
-                .AddInput(
-                    UssdInput.New("Sex")
-                        .Option("M", "Male")
-                        .Option("F", "Female"));
+                .AddInput(UssdInput.New("Sex")
+                    .Option("M", "Male")
+                    .Option("F", "Female"));
             return await RenderForm(form);
         } 
 
