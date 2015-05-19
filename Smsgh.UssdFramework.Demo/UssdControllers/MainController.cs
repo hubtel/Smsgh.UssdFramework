@@ -9,7 +9,7 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
         {
             var menu = UssdMenu.New("Welcome", Environment.NewLine + "by SMSGH")
                 .AddItem("Greet me", "GreetingForm")
-                .AddItem("Exit", "Exit");
+                .AddZeroItem("Exit", "Exit");
             return await RenderMenu(menu);
         }
 

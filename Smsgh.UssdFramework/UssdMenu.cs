@@ -14,6 +14,7 @@ namespace Smsgh.UssdFramework
         public string Prefix { get; set; }
         public string Postfix { get; set; }
         public List<UssdMenuItem> Items { get; set; }
+        public UssdMenuItem ZeroItem { get; set; }
 
         public UssdMenu() : this(null, null)
         {
@@ -24,6 +25,7 @@ namespace Smsgh.UssdFramework
             Prefix = prefix;
             Postfix = postfix;
             Items = new List<UssdMenuItem>();
+            ZeroItem = null;
         }
 
         /// <summary>
@@ -56,6 +58,24 @@ namespace Smsgh.UssdFramework
         }
 
         /// <summary>
+        /// Add an item to be rendered as last 0 option on menu
+        /// </summary>
+        /// <param name="display"></param>
+        /// <param name="action"></param>
+        /// <param name="controller"></param>
+        /// <returns></returns>
+        public UssdMenu AddZeroItem(string display, string action, string controller = null)
+        {
+            ZeroItem = new UssdMenuItem()
+            {
+                Display = display,
+                Action = action,
+                Controller = controller,
+            };
+            return this;
+        }
+
+        /// <summary>
         /// Render the menu to be displayed.
         /// </summary>
         /// <returns></returns>
@@ -67,6 +87,11 @@ namespace Smsgh.UssdFramework
             {
                 display += string.Format("{0}. {1}" + Environment.NewLine, 
                     i+1, Items[i].Display);
+            }
+            if (ZeroItem != null)
+            {
+                display += string.Format("{0}. {1}" + Environment.NewLine,
+                    0, ZeroItem.Display);
             }
             if (!string.IsNullOrWhiteSpace(Postfix))
             {

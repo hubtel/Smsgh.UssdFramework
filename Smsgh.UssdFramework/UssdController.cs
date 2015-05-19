@@ -113,6 +113,10 @@ namespace Smsgh.UssdFramework
             try
             {
                 var choice = Convert.ToInt16(Request.TrimmedMessage);
+                if (choice == 0 && menu.ZeroItem != null)
+                {
+                    return Redirect(menu.ZeroItem.Action, menu.ZeroItem.Controller);
+                }
                 item = menu.Items[choice-1];
             }
             catch (Exception exception)
