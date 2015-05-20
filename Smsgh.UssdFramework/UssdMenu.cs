@@ -11,8 +11,8 @@ namespace Smsgh.UssdFramework
     /// </summary>
     public class UssdMenu
     {
-        public string Prefix { get; set; }
-        public string Postfix { get; set; }
+        public string Header { get; set; }
+        public string Footer { get; set; }
         public List<UssdMenuItem> Items { get; set; }
         public UssdMenuItem ZeroItem { get; set; }
 
@@ -20,10 +20,10 @@ namespace Smsgh.UssdFramework
         {
             
         }
-        private UssdMenu(string prefix, string postfix)
+        private UssdMenu(string header, string footer)
         {
-            Prefix = prefix;
-            Postfix = postfix;
+            Header = header;
+            Footer = footer;
             Items = new List<UssdMenuItem>();
             ZeroItem = null;
         }
@@ -31,12 +31,12 @@ namespace Smsgh.UssdFramework
         /// <summary>
         /// Create a new USSD menu.
         /// </summary>
-        /// <param name="prefix">Displayed before menu items.</param>
-        /// <param name="postfix">Displayed after menu items.</param>
+        /// <param name="header">Displayed before menu items.</param>
+        /// <param name="footer">Displayed after menu items.</param>
         /// <returns></returns>
-        public static UssdMenu New(string prefix, string postfix = null)
+        public static UssdMenu New(string header, string footer = null)
         {
-            return new UssdMenu(prefix, postfix);
+            return new UssdMenu(header, footer);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Smsgh.UssdFramework
         }
 
         /// <summary>
-        /// Add an item to be rendered as last 0 option on menu
+        /// Add an item to be rendered as last 0 option on menu.
         /// </summary>
         /// <param name="display"></param>
         /// <param name="action"></param>
@@ -82,7 +82,7 @@ namespace Smsgh.UssdFramework
         public string Render()
         {
             var display = string.Empty;
-            display += Prefix + Environment.NewLine;
+            display += Header + Environment.NewLine;
             for (int i = 0; i < Items.Count; i++)
             {
                 display += string.Format("{0}. {1}" + Environment.NewLine, 
@@ -90,12 +90,12 @@ namespace Smsgh.UssdFramework
             }
             if (ZeroItem != null)
             {
-                display += string.Format("{0}. {1}" + Environment.NewLine,
-                    0, ZeroItem.Display);
+                display += string.Format("0. {0}" + Environment.NewLine,
+                    ZeroItem.Display);
             }
-            if (!string.IsNullOrWhiteSpace(Postfix))
+            if (!string.IsNullOrWhiteSpace(Footer))
             {
-                display += Postfix;
+                display += Footer;
             }
             return display;
         }
