@@ -9,6 +9,7 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
         {
             var menu = UssdMenu.New("Welcome", Environment.NewLine + "by SMSGH")
                 .AddItem("Greet me", "GreetingForm")
+                .AddItem("What's the time?", "Time")
                 .AddZeroItem("Exit", "Exit");
             return await RenderMenu(menu);
         }
@@ -45,6 +46,12 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
             var name = formData["Name"];
             var prefix = formData["Sex"] == "M" ? "Master" : "Madam";
             return Render(string.Format("{0}, {1} {2}!", greeting, prefix, name));
+        }
+
+        public async Task<UssdResponse> Time()
+        {
+            return await Task.FromResult(Render(string.Format("{0:t}", 
+                DateTime.UtcNow)));
         }
 
         public async Task<UssdResponse> Exit()
