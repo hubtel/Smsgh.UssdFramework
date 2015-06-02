@@ -67,7 +67,7 @@ namespace Smsgh.UssdFramework.Demo.Controllers
 }
 ```
 
-This tells the framework to route all initial requests to `MainController`'s `Menu` action, which is a method with signature `Func<Task<UssdResponse>>`.
+This tells the framework to route all initial requests to `MainController`'s `Start` action, which is a method with signature `Func<Task<UssdResponse>>`.
 
 ### Controller actions
 
