@@ -25,6 +25,7 @@ __Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on 
 * `DataBag` helper in controllers for caching data across requests.
 * Create forms to collect user input.
 * Session logging (optional).
+* Automatic nested routing. Example: A USSD app at _*714#_ having a menu with 3 items; you can easily go to 2nd menu item by dialling _*714*2#_.
 
 ## Quick Start
 

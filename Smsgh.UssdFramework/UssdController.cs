@@ -16,6 +16,7 @@ namespace Smsgh.UssdFramework
         public UssdRequest Request { get; set; }
         public Dictionary<string, string> Data { get; set; } 
         public UssdDataBag DataBag { get; set; }
+        public Dictionary<string, string> FormData { get; set; } 
 
         #region Responders
 
@@ -95,11 +96,18 @@ namespace Smsgh.UssdFramework
         /// Get Form's response data.
         /// </summary>
         /// <returns></returns>
-        public async Task<Dictionary<string, string>> GetFormData()
+        internal async Task<Dictionary<string, string>> GetFormData()
         {
             var json = await DataBag.Get(FormDataKey);
-            var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-            return data;
+            try
+            {
+                var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                return data;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         } 
         #endregion
 

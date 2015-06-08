@@ -27,7 +27,6 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
 
         public async Task<UssdResponse> Greeting()
         {
-            var formData = await GetFormData();
             var hour = DateTime.UtcNow.Hour;
             var greeting = string.Empty;
             if (hour < 12)
@@ -42,8 +41,8 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
             {
                 greeting = "Good night";
             }
-            var name = formData["Name"];
-            var prefix = formData["Sex"] == "M" ? "Master" : "Madam";
+            var name = FormData["Name"];
+            var prefix = FormData["Sex"] == "M" ? "Master" : "Madam";
             return Render(string.Format("{0}, {1} {2}!", greeting, prefix, name));
         }
 

@@ -94,6 +94,7 @@ namespace Smsgh.UssdFramework
             controller.Request = Request;
             controller.DataBag = DataBag;
             controller.Data = Data;
+            controller.FormData = await controller.GetFormData();
             var methodInfo = controller.GetType().GetMethod(actionName);
             if (methodInfo == null)
             {
