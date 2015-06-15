@@ -11,6 +11,12 @@ namespace Smsgh.UssdFramework
         public string Type { get; private set; }
         public string Message { get; private set; }
         public string ClientState { get; private set; }
+        public Exception Exception { get; private set; }
+
+        public UssdResponse()
+        {
+            Exception = null;
+        }
 
 
         public string NextRoute { get; private set; }
@@ -37,6 +43,12 @@ namespace Smsgh.UssdFramework
                 NextRoute = nextRoute,
                 IsRedirect = true,
             };
+        }
+
+        public UssdResponse SetException(Exception exception)
+        {
+            Exception = exception;
+            return this;
         }
 
 

@@ -74,7 +74,6 @@ namespace Smsgh.UssdFramework
             var context = new UssdContext(store, request, data);
             UssdResponse response;
             DateTime endTime;
-            string error = null;
             await PreLog(loggingStore, request, startTime, arbitraryLogData);
             try
             {
@@ -93,14 +92,14 @@ namespace Smsgh.UssdFramework
             catch (Exception e)
             {
                 response = UssdResponse.Render(e.Message);
-                error = e.StackTrace;
+                response.SetException(e);
             }
             finally
             {
                 if (dispose) context.Dispose();
                 endTime = DateTime.UtcNow;
             }
-            await PostLog(loggingStore, request, response, startTime, endTime, error, dispose);
+            await PostLog(loggingStore, request, response, startTime, endTime, dispose);
             return response;
         }
 
@@ -154,14 +153,14 @@ namespace Smsgh.UssdFramework
         }
 
         private static async Task PostLog(ILoggingStore store, UssdRequest request, UssdResponse response,
-            DateTime startTime, DateTime endTime, string error, bool dispose)
+            DateTime startTime, DateTime endTime, bool dispose)
         {
             if (store == null) return;
             var log = await store.Find(request.SessionId);
             if (log == null) return;
             log.EndTime = endTime;
             log.DurationInMilliseconds = endTime.Subtract(log.StartTime).TotalMilliseconds;
-            log.ErrorStackTrace = error;
+            log.ErrorStackTrace = response.Exception == null ? null : response.Exception.StackTrace;
             var entry = new UssdSessionLogEntry
             {
                 StartTime = startTime,
