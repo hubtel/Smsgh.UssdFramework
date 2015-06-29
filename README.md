@@ -31,9 +31,11 @@ __Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on 
 
 ### Dependencies
 
-Smsgh.UssdFramework requires a session store. This defaults to [Redis](http://redis.io).
+Smsgh.UssdFramework requires a session store. [Redis](http://redis.io) store is included. 
 
 On Windows, Redis can be installed using [github.com/MSOpenTech/redis](https://github.com/MSOpenTech/redis).
+
+Don't want to use the bundled `RedisStore`? Implement `IStore` using your store backend. Better still, submit a pull request.
 
 
 ### Installation
