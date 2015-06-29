@@ -7,10 +7,12 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
     {
         public async Task<UssdResponse> Start()
         {
-            var menu = UssdMenu.New("Welcome", Environment.NewLine + "by SMSGH")
-                .AddItem("Greet me", "GreetingForm")
+            var menu = UssdMenu.New();
+            menu.Header = "Welcome";
+            menu.AddItem("Greet me", "GreetingForm")
                 .AddItem("What's the time?", "Time")
                 .AddZeroItem("Exit", "Exit");
+            menu.Footer = Environment.NewLine + "by SMSGH";
             return await RenderMenu(menu);
         }
 

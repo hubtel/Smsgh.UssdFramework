@@ -34,7 +34,7 @@ namespace Smsgh.UssdFramework
         /// <param name="header">Displayed before menu items.</param>
         /// <param name="footer">Displayed after menu items.</param>
         /// <returns></returns>
-        public static UssdMenu New(string header, string footer = null)
+        public static UssdMenu New(string header = null, string footer = null)
         {
             return new UssdMenu(header, footer);
         }
@@ -82,7 +82,10 @@ namespace Smsgh.UssdFramework
         public string Render()
         {
             var display = string.Empty;
-            display += Header + Environment.NewLine;
+            if (!string.IsNullOrWhiteSpace(Header))
+            {
+                display += Header + Environment.NewLine;
+            }
             for (int i = 0; i < Items.Count; i++)
             {
                 display += string.Format("{0}. {1}" + Environment.NewLine, 
