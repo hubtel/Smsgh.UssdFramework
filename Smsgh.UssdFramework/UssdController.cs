@@ -9,9 +9,9 @@ namespace Smsgh.UssdFramework
 {
     public class UssdController : IDisposable
     {
-        protected const string MenuProcessorDataKey = "MenuProcessorData";
-        protected const string FormProcessorDataKey = "FormProcessorData";
-        protected const string FormDataKey = "FormData";
+        private const string MenuProcessorDataKey = "MenuProcessorData";
+        private const string FormProcessorDataKey = "FormProcessorData";
+        private const string FormDataKey = "FormData";
 
         public UssdRequest Request { get; set; }
         public Dictionary<string, string> Data { get; set; } 
