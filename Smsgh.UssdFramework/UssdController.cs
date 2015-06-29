@@ -56,6 +56,7 @@ namespace Smsgh.UssdFramework
         public UssdResponse Render(string message, string action = null, 
             string controller = null)
         {
+            if (message == null) message = string.Empty;
             string route = null;
             if (action != null)
             {
