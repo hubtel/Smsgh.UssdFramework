@@ -28,26 +28,31 @@ namespace Smsgh.UssdFramework
             string initiationController, string initiationAction,
             Dictionary<string, string> data = null, ILoggingStore loggingStore = null, string arbitraryLogData = null)
         {
-            var messages = GetInitiationMessages(request);
-            if (messages == null)
-            {
-                return
+            return
                     await
                         ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
                             arbitraryLogData);
-            }
-            UssdResponse response = null;
-            for (int i = 0; i < messages.Count; i++)
-            {
-                request.Message = messages[i];
-                if (i != 0) request.Type = UssdRequestTypes.Response.ToString();
-                bool dispose = (i == messages.Count-1);
-                response =
-                    await
-                        ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
-                            arbitraryLogData, dispose);
-            }
-            return response;
+            // TODO: auto process sub dial
+            //var messages = GetInitiationMessages(request);
+            //if (messages == null)
+            //{
+            //    return
+            //        await
+            //            ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
+            //                arbitraryLogData);
+            //}
+            //UssdResponse response = null;
+            //for (int i = 0; i < messages.Count; i++)
+            //{
+            //    request.Message = messages[i];
+            //    if (i != 0) request.Type = UssdRequestTypes.Response.ToString();
+            //    bool dispose = (i == messages.Count-1);
+            //    response =
+            //        await
+            //            ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
+            //                arbitraryLogData, dispose);
+            //}
+            //return response;
         }
 
         /// <summary>
