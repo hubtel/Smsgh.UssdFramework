@@ -178,13 +178,13 @@ namespace Smsgh.UssdFramework
         private static List<string> GetInitiationMessages(UssdRequest request)
         {
             if (request.RequestType != UssdRequestTypes.Initiation) return null;
-            if (request.ServiceCode == request.Message) return null;
+            var serviceCode = request.ServiceCode;
+            var message = request.Message.Substring(0, request.Message.Length - 1);
+            if (serviceCode == message) return null;
             var messages = new List<string>()
             {
                 request.ServiceCode,
             };
-            var serviceCode = request.ServiceCode.Substring(0, request.ServiceCode.Length - 1);
-            var message = request.Message.Substring(0, request.Message.Length - 1);
             message = message.Substring(serviceCode.Length + 1);
             List<string> messageList = message.Split('*').ToList();
             return messages.Concat(messageList).ToList();
