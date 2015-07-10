@@ -188,7 +188,7 @@ namespace Smsgh.UssdFramework.Demo.Controllers
 
 That's it! 
 
-You now have detailed session logs in your MongoDB database. You can use a tool like [UMongo](http://http://edgytech.com/umongo/) to view logs.
+You now have detailed session logs in your MongoDB database. You can use a tool like [UMongo](http://edgytech.com/umongo/) to view logs.
 
 
 # License
