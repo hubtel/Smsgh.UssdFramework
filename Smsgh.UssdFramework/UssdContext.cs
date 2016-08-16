@@ -77,13 +77,27 @@ namespace Smsgh.UssdFramework
             UssdController controller = null;
             foreach (var assembly in assemblies)
             {
-                foreach (var type in assembly.GetTypes())
+                Type[] allTypes = null;
+
+                try
                 {
-                    if (type.Name == controllerName 
-                        && type.IsSubclassOf(typeof (UssdController)))
+                    allTypes = assembly.GetTypes();
+                }
+                catch (Exception exception)
+                {
+                    allTypes = null;
+                }
+
+                if (allTypes != null)
+                {
+                    foreach (var type in allTypes)
                     {
-                        controller = (UssdController) assembly.CreateInstance(type.FullName);
-                        break;
+                        if (type.Name == controllerName
+                            && type.IsSubclassOf(typeof(UssdController)))
+                        {
+                            controller = (UssdController)assembly.CreateInstance(type.FullName);
+                            break;
+                        }
                     }
                 }
             }
