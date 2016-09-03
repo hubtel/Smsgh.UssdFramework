@@ -32,27 +32,6 @@ namespace Smsgh.UssdFramework
                     await
                         ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
                             arbitraryLogData);
-            // TODO: auto process sub dial
-            //var messages = GetInitiationMessages(request);
-            //if (messages == null)
-            //{
-            //    return
-            //        await
-            //            ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
-            //                arbitraryLogData);
-            //}
-            //UssdResponse response = null;
-            //for (int i = 0; i < messages.Count; i++)
-            //{
-            //    request.Message = messages[i];
-            //    if (i != 0) request.Type = UssdRequestTypes.Response.ToString();
-            //    bool dispose = (i == messages.Count-1);
-            //    response =
-            //        await
-            //            ProcessRequest(store, request, initiationController, initiationAction, data, loggingStore,
-            //                arbitraryLogData, dispose);
-            //}
-            //return response;
         }
 
         /// <summary>
@@ -69,7 +48,7 @@ namespace Smsgh.UssdFramework
         /// <returns></returns>
         public static async Task<UssdResponse> ProcessRequest(IStore store, UssdRequest request,
             string initiationController, string initiationAction, Dictionary<string, string> data = null, 
-            ILoggingStore loggingStore = null, string arbitraryLogData = null, bool dispose = true)
+            ILoggingStore loggingStore = null, string arbitraryLogData = null)
         {
             var startTime = DateTime.UtcNow;
             if (data == null)
@@ -101,10 +80,10 @@ namespace Smsgh.UssdFramework
             }
             finally
             {
-                if (dispose) context.Dispose();
+                context.Dispose();
                 endTime = DateTime.UtcNow;
             }
-            await PostLog(loggingStore, request, response, startTime, endTime, dispose);
+            await PostLog(loggingStore, request, response, startTime, endTime);
             return response;
         }
 
@@ -114,7 +93,53 @@ namespace Smsgh.UssdFramework
         {
             await context.SessionClose();
             await context.SessionSetNextRoute(route);
-            return await OnResponse(context);
+            UssdResponse ussdResponse = await OnResponse(context);
+
+            // Process auto dial requests, i.e. making requests like *714*2*3*1*1# when
+            // the service code is *714*2# equivalent to texting *714*2# followed by
+            // 3, 1 and 1 in three user inputs.
+            if (ussdResponse.AutoDialOn && !ussdResponse.IsRelease)
+            {
+                UssdRequest ussdRequest = context.Request;
+                string initiationMessage = ussdRequest.Message;
+                string serviceCode = ussdRequest.ServiceCode;
+
+                // To make searching for dial string and split more
+                // straightforward, replace # with *.
+                initiationMessage = initiationMessage.Replace("#", "*");
+                serviceCode = serviceCode.Replace("#", "*");
+
+                int extraIndex = initiationMessage.IndexOf(serviceCode);
+                if (extraIndex == -1)
+                {
+                    throw new Exception(string.Format(
+                            "Service code {0} not found in initiation "
+                                    + "message {1}", ussdRequest.ServiceCode,
+                                    ussdRequest.Message));
+                }
+
+                string extra = initiationMessage.Substring(
+                        extraIndex + serviceCode.Length);
+                string[] codes = extra.Split(new string[] { "*" }, 
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                int i = 0;
+                while (i < codes.Length)
+                {
+                    string nextMessage = codes[i];
+                    ussdRequest.Type = UssdRequestTypes.Response.ToString();
+                    ussdRequest.Message = nextMessage;
+                    ussdRequest.AutoDialIndex = i;
+                    ussdRequest.AutoDialOriginated = true;
+                    ussdResponse = await OnResponse(context);
+                    if (ussdResponse.IsRelease || !ussdResponse.AutoDialOn)
+                    {
+                        break;
+                    }
+                    i++;
+                }
+            }
+            return ussdResponse;
         }
 
         private static async Task<UssdResponse> OnResponse(UssdContext context)
@@ -158,7 +183,7 @@ namespace Smsgh.UssdFramework
         }
 
         private static async Task PostLog(ILoggingStore store, UssdRequest request, UssdResponse response,
-            DateTime startTime, DateTime endTime, bool dispose)
+            DateTime startTime, DateTime endTime)
         {
             if (store == null) return;
             var log = await store.Find(request.SessionId);
@@ -176,7 +201,7 @@ namespace Smsgh.UssdFramework
             };
             await store.Update(log);
             await store.AddEntry(request.SessionId, entry);
-            if (dispose) store.Dispose();
+            store.Dispose();
         }
         #endregion Logging
 

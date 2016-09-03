@@ -15,7 +15,7 @@ namespace Smsgh.UssdFramework
         private string NextRouteKey { get { return Request.Mobile + "NextRoute"; } }
         private string DataBagKey { get { return Request.Mobile + "DataBag"; } }
         private Func<Task<UssdResponse>> Action { get; set; }
-        private UssdRequest Request { get; set; }
+        public UssdRequest Request { get; private set; }
         private IStore Store { get; set; }
         private Dictionary<string, string> Data { get; set; } 
         private UssdDataBag DataBag { get; set; }
