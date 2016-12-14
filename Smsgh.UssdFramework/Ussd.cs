@@ -89,8 +89,11 @@ namespace Smsgh.UssdFramework
                             initiationController, initiationAction);
                         response = await OnInitiation(context, route);
                         break;
-                    default:
+                    case UssdRequestTypes.Response:
                         response = await OnResponse(context);
+                        break;
+                    default:
+                        response = UssdResponse.Render(string.Format("Request Type is {0}. Will ignore intended action.", request.Type));
                         break;
                 }
             }
