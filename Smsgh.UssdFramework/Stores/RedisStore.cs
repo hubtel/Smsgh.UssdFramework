@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
@@ -9,9 +10,15 @@ namespace Smsgh.UssdFramework.Stores
         private ConnectionMultiplexer Connection { get; set; }
         private IDatabase Db { get; set; }
 
-        public RedisStore(string dbAddress = "localhost", int dbNumber = 0)
+        //public RedisStore(string dbAddress = "localhost", int dbNumber = 0)
+        //{
+        //    Connection = ConnectionMultiplexer.Connect(dbAddress);
+        //    Db = Connection.GetDatabase(dbNumber);
+        //}
+
+        public RedisStore(ConnectionMultiplexer connectionMultiplexer,int dbNumber=0)
         {
-            Connection = ConnectionMultiplexer.Connect(dbAddress);
+            Connection = connectionMultiplexer;
             Db = Connection.GetDatabase(dbNumber);
         }
 
@@ -74,11 +81,12 @@ namespace Smsgh.UssdFramework.Stores
         private async Task ResetExpiry(string key)
         {
             await Db.KeyExpireAsync(key, TimeSpan.FromSeconds(90));
+            
         }
 
         public void Dispose()
         {
-            Connection.Dispose();
+            //Connection.Dispose();
         }
     }
 }

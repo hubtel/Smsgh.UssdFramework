@@ -29,6 +29,7 @@ namespace Smsgh.UssdFramework.Demo.UssdControllers
 
         public async Task<UssdResponse> Greeting()
         {
+            await Task.Delay(0);
             var hour = DateTime.UtcNow.Hour;
             var greeting = string.Empty;
             if (hour < 12)
