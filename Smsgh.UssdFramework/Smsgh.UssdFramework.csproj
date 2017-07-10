@@ -49,8 +49,11 @@
     <Compile Include="LoggingStores\ILoggingStore.cs" />
     <Compile Include="LoggingStores\UssdSessionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stores\ConnectionManager.cs" />
+    <Compile Include="Stores\IConnectionLayer.cs" />
     <Compile Include="Stores\IStore.cs" />
-    <Compile Include="Stores\RedisStore.cs" />
+    <Compile Include="Stores\Redis\RedisConnectionLayer.cs" />
+    <Compile Include="Stores\Redis\RedisStore.cs" />
     <Compile Include="Ussd.cs" />
     <Compile Include="UssdContext.cs" />
     <Compile Include="UssdController.cs" />

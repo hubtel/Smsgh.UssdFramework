@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace Smsgh.UssdFramework.Stores
+namespace Smsgh.UssdFramework.Stores.Redis
 {
     public class RedisStore : IStore
     {
         private ConnectionMultiplexer Connection { get; set; }
         private IDatabase Db { get; set; }
 
-        //public RedisStore(string dbAddress = "localhost", int dbNumber = 0)
-        //{
-        //    Connection = ConnectionMultiplexer.Connect(dbAddress);
-        //    Db = Connection.GetDatabase(dbNumber);
-        //}
+        public RedisStore(string dbAddress = "localhost", int dbNumber = 0)
+        {
+            Connection = ConnectionMultiplexer.Connect(dbAddress);
+            Db = Connection.GetDatabase(dbNumber);
+        }
 
         public RedisStore(ConnectionMultiplexer connectionMultiplexer,int dbNumber=0)
         {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
-using Smsgh.UssdFramework.Logging;
 using Smsgh.UssdFramework.Stores;
+using Smsgh.UssdFramework.Stores.Redis;
 
 namespace Smsgh.UssdFramework.Demo.Controllers
 {
@@ -22,8 +17,14 @@ namespace Smsgh.UssdFramework.Demo.Controllers
             {
                 await redisConnection.ConfigureAsync();
             }
-            return Ok(await Ussd.Process(new RedisStore(redisConnection), request, "Main", "Start", null, 
-                new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
+            //return Ok(await Ussd.Process(new RedisStore(redisConnection), request, "Main", "Start", null, 
+            //    new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
+
+            //return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Start", null,
+            //    null));
+
+            return Ok(await Ussd.Process(new RedisStore(redisConnection), request, "Main", "Start", null,
+                null));
         } 
     }
 }
