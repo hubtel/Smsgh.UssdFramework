@@ -17,12 +17,8 @@ namespace Smsgh.UssdFramework.Demo.Controllers
             {
                 await redisConnection.ConfigureAsync();
             }
-            //return Ok(await Ussd.Process(new RedisStore(redisConnection), request, "Main", "Start", null, 
-            //    new MongoDbLoggingStore("mongodb://localhost", "demoussd")));
-
-            //return Ok(await Ussd.Process(new RedisStore(), request, "Main", "Start", null,
-            //    null));
-
+           
+            //intentionally skipped mongodb logging
             return Ok(await Ussd.Process(new RedisStore(redisConnection), request, "Main", "Start", null,
                 null));
         } 
