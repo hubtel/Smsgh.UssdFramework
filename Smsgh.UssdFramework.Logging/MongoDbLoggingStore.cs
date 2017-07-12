@@ -14,6 +14,8 @@ namespace Smsgh.UssdFramework.Logging
         public MongoDbLoggingStore(string connectionString, string databaseName, 
             string collectionName = "ussdsessionlog")
         {
+
+            //todo: code smell. will have to optimize this too...
            Collection = new MongoClient(connectionString).GetDatabase(databaseName)
                .GetCollection<MongoDbSessionLog>(collectionName);
         }
