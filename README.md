@@ -1,4 +1,4 @@
-# Smsgh.UssdFramework
+# Hubtel USSD Framework
 
 This is a natural successor to our [UssdFramework](http://github.com/smsgh/ussd-framework).
 
@@ -11,9 +11,9 @@ The previous [UssdFramework](http://github.com/smsgh/ussd-framework) was a nice 
 * Step based flow.
 * Unnecessary abstractions that limit flexiblity.
 
-__Smsgh.UssdFramework__ addresses these and a lot more by focusing on simplicity.
+__Hubtel.UssdFramework__ addresses these and a lot more by focusing on simplicity.
 
-__Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on our [USSD platform](http://developers.smsgh.com/documentations/ussd).
+__Hubtel.UssdFramework__ allows you to easily build dynamic USSD applications on our [USSD platform](http://developers.hubtel.com/documentations/ussd).
 
 ## Key Features
 
@@ -30,7 +30,7 @@ __Smsgh.UssdFramework__ allows you to easily build dynamic USSD applications on 
 
 ### Dependencies
 
-Smsgh.UssdFramework requires a session store. [Redis](http://redis.io) store is included. 
+Hubtel.UssdFramework requires a session store. [Redis](http://redis.io) store is included. 
 
 On Windows, Redis can be installed using [github.com/MSOpenTech/redis](https://github.com/MSOpenTech/redis).
 
@@ -39,7 +39,7 @@ Don't want to use the bundled `RedisStore`? Implement `IStore` using your store 
 
 ### Installation
 
-The easiest way to install Smsgh.UssdFramework is via [NuGet](http://www.nuget.org/).
+The easiest way to install Hubtel.UssdFramework is via [NuGet](http://www.nuget.org/).
 
 ```
 PM> Install-Package Smsgh.UssdFramework
