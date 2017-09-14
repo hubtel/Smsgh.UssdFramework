@@ -16,12 +16,14 @@ namespace Smsgh.UssdFramework
         public UssdResponse()
         {
             Exception = null;
+            AutoDialOn = true;
         }
 
 
         public string NextRoute { get; private set; }
         public bool IsRelease { get { return string.IsNullOrWhiteSpace(NextRoute); } }
         public bool IsRedirect { get; private set; }
+        public bool AutoDialOn { get; set; }
 
         public static UssdResponse Render(string message, string nextRoute = null)
         {

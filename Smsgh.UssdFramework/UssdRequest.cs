@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,10 @@ namespace Smsgh.UssdFramework
         public string Type { get; set; }
         public string Message { get; set; }
         public string Operator { get; set; }
+        [JsonIgnore]
+        public int AutoDialIndex { get; set; }
+        [JsonIgnore]
+        public bool AutoDialOriginated { get; set; }
 
         public UssdRequestTypes RequestType 
         {
